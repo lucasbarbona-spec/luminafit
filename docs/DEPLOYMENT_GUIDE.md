@@ -1,11 +1,11 @@
 # 🚀 Guía de Despliegue - LuminaFit
 
-Esta guía te llevará paso a paso desde la configuración de Firebase hasta el despliegue en Render.
+Esta guía te llevará paso a paso desde la configuración de Firebase hasta el despliegue en Vercel.
 
 ## 📋 Requisitos Previos
 
 - Cuenta de [Firebase](https://console.firebase.google.com/)
-- Cuenta de [Render](https://render.com/)
+- Cuenta de [Vercel](https://vercel.com/)
 - Node.js 18+ instalado localmente
 - Git configurado
 
@@ -39,7 +39,7 @@ Esta guía te llevará paso a paso desde la configuración de Firebase hasta el 
 1. En el menú lateral, ve a **Firestore Database**
 2. Haz clic en "Crear base de datos"
 3. Selecciona modo de inicio: **Comenzar en modo de producción**
-4. Elige ubicación: `nam5 (us-central)` o la más cercana a tus usuarios
+4. Elige ubicación: la más cercana a tus usuarios
 5. Haz clic en "Listo"
 
 ### Paso 4: Configurar Storage (Opcional - para imágenes)
@@ -56,9 +56,8 @@ Esta guía te llevará paso a paso desde la configuración de Firebase hasta el 
 2. Desplázate hacia abajo a "Tus apps"
 3. Haz clic en el ícono de `</>` (Web app)
 4. Nombre de la app: `LuminaFit Web`
-5. **IMPORTANTE**: Marca la casilla "También configurar Firebase Hosting" (aunque usaremos Render)
-6. Haz clic en "Registrar app"
-7. Copia las credenciales que aparecen:
+5. Haz clic en "Registrar app"
+6. Copia las credenciales que aparecen:
 
 ```javascript
 const firebaseConfig = {
@@ -107,22 +106,28 @@ cp .env.local.example .env.local
 
 ```env
 # Firebase Configuration (REQUIRED)
-NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyAINOZPintUP2PJIgbMvhz9xqD-rdeN-Bk
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=tu-proyecto.firebaseapp.com
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=tu-proyecto
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=123456789
-NEXT_PUBLIC_FIREBASE_APP_ID=1:123456789:web:abcdef123456
+NEXT_PUBLIC_FIREBASE_API_KEY=tu_firebase_api_key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=tu_proyecto.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=tu_proyecto_id
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=tu_sender_id
+NEXT_PUBLIC_FIREBASE_APP_ID=1:tu_sender_id:web:abcdef123456
 
 # Cloudinary Configuration (OPTIONAL)
-NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=tu_cloud_name
-NEXT_PUBLIC_CLOUDINARY_API_KEY=tu_api_key
-CLOUDINARY_API_SECRET=tu_secret
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=tu_cloudinary_cloud_name
+NEXT_PUBLIC_CLOUDINARY_API_KEY=tu_cloudinary_api_key
+CLOUDINARY_API_SECRET=tu_cloudinary_api_secret
+
+# Mercado Pago Configuration (OPTIONAL)
+# Agrega estas variables si quieres habilitar pago por Mercado Pago
+MERCADO_PAGO_ACCESS_TOKEN=tu_mercadopago_access_token
+MERCADO_PAGO_API_URL=https://api.mercadopago.com
+NEXT_PUBLIC_APP_URL=https://tu-app.vercel.app
 
 # Security (REQUIRED)
-TOKEN_SECRET=tu_secreto_seguro_muy_largo_min_32_caracteres
+TOKEN_SECRET=tu_secreto_seguro_32_caracteres_o_mas
 
 # Application Configuration (REQUIRED)
-NEXT_PUBLIC_BASE_URL=https://tu-app.onrender.com
+NEXT_PUBLIC_BASE_URL=https://tu-app.vercel.app
 
 # Environment
 NODE_ENV=production
@@ -149,11 +154,11 @@ npm run build
 npm start
 ```
 
-Si todo funciona correctamente, continúa con Render.
+Si todo funciona correctamente, continúa con Vercel.
 
 ---
 
-## 🚀 Parte 3: Despliegue en Render
+## 🚀 Parte 3: Despliegue en Vercel
 
 ### Paso 1: Preparar el Repositorio
 
@@ -161,60 +166,51 @@ Si todo funciona correctamente, continúa con Render.
 2. Crea un commit con todos los cambios:
 ```bash
 git add .
-git commit -m "Ready for production deployment"
+git commit -m "Ready for Vercel deployment"
 git push origin main
 ```
 
-### Paso 2: Crear Servicio Web en Render
+### Paso 2: Crear Proyecto en Vercel
 
-1. Ve a [Render Dashboard](https://dashboard.render.com/)
-2. Haz clic en "New" → "Web Service"
-3. Conecta tu repositorio de GitHub/GitLab
-4. Selecciona el repositorio de LuminaFit
+1. Ve a [Vercel](https://vercel.com/)
+2. Inicia sesión con tu cuenta de GitHub
+3. Haz clic en "New Project"
+4. Selecciona el repositorio `luminafit`
+5. Haz clic en "Import"
 
-### Paso 3: Configurar el Servicio
+### Paso 3: Configurar Build y Variables de Entorno
 
-**Basic Settings:**
-- **Name**: `luminafit` (o tu preferencia)
-- **Environment**: `Node`
+**Build Settings:**
+- **Framework Preset**: `Next.js`
 - **Build Command**: `npm run build`
-- **Start Command**: `npm start`
+- **Output Directory**: no hace falta cambiarlo
 
-**Advanced Settings:**
-- **Node Version**: `18.17.0` o superior
-- **Environment Variables**: Agrega todas las variables de `.env.local`:
+**Environment Variables:** agrega los valores reales del archivo `.env.local`:
 
 ```
-NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSy...
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=tu-proyecto.firebaseapp.com
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=tu-proyecto
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=123456789
-NEXT_PUBLIC_FIREBASE_APP_ID=1:123456789:web:abcdef123456
-TOKEN_SECRET=tu_secreto_seguro_muy_largo
-NEXT_PUBLIC_BASE_URL=https://luminafit.onrender.com
+NEXT_PUBLIC_FIREBASE_API_KEY=tu_firebase_api_key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=tu_proyecto.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=tu_proyecto_id
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=tu_sender_id
+NEXT_PUBLIC_FIREBASE_APP_ID=1:tu_sender_id:web:abcdef123456
+TOKEN_SECRET=tu_secreto_seguro_32_caracteres_o_mas
+NEXT_PUBLIC_BASE_URL=https://<tu-proyecto>.vercel.app
 NODE_ENV=production
 ```
 
 Si usas Cloudinary, agrega también:
 ```
-NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=tu_cloud_name
-NEXT_PUBLIC_CLOUDINARY_API_KEY=tu_api_key
-CLOUDINARY_API_SECRET=tu_secret
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=tu_cloudinary_cloud_name
+NEXT_PUBLIC_CLOUDINARY_API_KEY=tu_cloudinary_api_key
+CLOUDINARY_API_SECRET=tu_cloudinary_api_secret
 ```
 
-### Paso 4: Configurar Dominio Personalizado (Opcional)
+### Paso 4: Desplegar
 
-1. En Render, ve a tu servicio → "Settings" → "Custom Domain"
-2. Agrega tu dominio personalizado
-3. Actualiza `NEXT_PUBLIC_BASE_URL` con tu dominio real
-4. Configura los DNS según las instrucciones de Render
-
-### Paso 5: Desplegar
-
-1. Haz clic en "Create Web Service"
-2. Render comenzará a construir automáticamente
-3. El proceso tomará 5-15 minutos
-4. Una vez completado, verás la URL de tu app: `https://luminafit.onrender.com`
+1. Haz clic en "Deploy"
+2. Vercel construirá el proyecto automáticamente
+3. Al finalizar obtendrás la URL de despliegue
+4. Si usas dominio personalizado, configúralo en Vercel más tarde
 
 ---
 
@@ -222,20 +218,20 @@ CLOUDINARY_API_SECRET=tu_secret
 
 ### Verificar Despliegue
 
-1. **Accede a tu app**: Ve a la URL proporcionada por Render
-2. **Prueba autenticación**: Intenta registrarte con email/password
-3. **Verifica Firestore**: Los datos deberían guardarse correctamente
-4. **Revisa logs**: En Render Dashboard → "Logs" para ver errores
+1. **Accede a tu app**: Ve a la URL generada por Vercel
+2. **Prueba autenticación**: Regístrate con email/password
+3. **Verifica Firestore**: Los datos deben guardarse correctamente
+4. **Revisa logs**: En Vercel Dashboard → tu proyecto → "Deployments" → logs
 
 ### Problemas Comunes
 
 #### Error: "NEXT_PUBLIC_BASE_URL not set"
-- Asegúrate de que la variable esté configurada en Render
+- Asegúrate de que la variable esté configurada en Vercel
 - Incluye `https://` en la URL
 
 #### Error de Firebase: "Invalid API key"
 - Verifica que las credenciales de Firebase sean correctas
-- Asegúrate de que el dominio de Render esté autorizado en Firebase Console
+- Asegúrate de que el dominio de Vercel esté autorizado en Firebase Console
 
 #### Error de Build: "Module not found"
 - Verifica que todas las dependencias estén en `package.json`
@@ -243,11 +239,11 @@ CLOUDINARY_API_SECRET=tu_secret
 
 #### Problemas de CORS
 - En Firebase Console → Authentication → Settings → Authorized domains
-- Agrega tu dominio de Render: `https://tu-app.onrender.com`
+- Agrega tu dominio de Vercel: `https://<tu-proyecto>.vercel.app`
 
 ### Monitoreo
 
-1. **Logs en Render**: Dashboard → Tu servicio → "Logs"
+1. **Logs en Vercel**: Dashboard → Tu proyecto → "Deployments"
 2. **Firebase Console**: Para ver uso de Auth y Firestore
 3. **Google Analytics**: Si lo configuraste inicialmente
 

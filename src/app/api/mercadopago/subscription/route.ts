@@ -6,7 +6,7 @@ const MERCADO_PAGO_API_URL = process.env.MERCADO_PAGO_API_URL || 'https://api.me
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { suscripcion, sandbox = true } = body;
+    const { suscripcion } = body;
 
     if (!suscripcion || !suscripcion.planNombre || !suscripcion.precio) {
       return NextResponse.json(
@@ -32,6 +32,8 @@ export async function POST(request: NextRequest) {
     const meses = frecuenciaMeses[suscripcion.frecuencia as keyof typeof frecuenciaMeses] || 1;
 
     // Crear preferencia para suscripción recurrente
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+
     const preferenceData = {
       items: [
         {
@@ -43,9 +45,9 @@ export async function POST(request: NextRequest) {
         },
       ],
       back_urls: {
-        success: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/payment/success`,
-        failure: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/payment/failure`,
-        pending: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/payment/pending`,
+        success: `${appUrl}/payment/success`,
+        failure: `${appUrl}/payment/failure`,
+        pending: `${appUrl}/payment/pending`,
       },
       auto_return: 'approved',
       metadata: {

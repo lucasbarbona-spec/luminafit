@@ -39,14 +39,20 @@ export default function ClientMarketplace() {
           description: title,
           price: price,
           currency: 'ARS',
-          passFeeToClient: true
+          passFeeToClient: true,
+          metadata: {
+            userId: user?.uid || null,
+            email: user?.email || null,
+          },
         }),
       });
 
       if (!response.ok) throw new Error('Error al generar el pago');
       
-      const { init_point } = await response.json();
-      window.location.href = init_point; 
+      const { init_point, sandbox_init_point } = await response.json();
+      const isSandbox = window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1');
+      const checkoutUrl = isSandbox && sandbox_init_point ? sandbox_init_point : init_point;
+      window.location.href = checkoutUrl; 
     } catch (error) {
       console.error(error);
       alert("Hubo un error al iniciar el pago.");

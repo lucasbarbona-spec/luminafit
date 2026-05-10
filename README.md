@@ -79,6 +79,11 @@ TOKEN_SECRET=tu_secreto_seguro_32_caracteres
 # Application Configuration (REQUERIDO)
 NEXT_PUBLIC_BASE_URL=http://localhost:3000
 
+# Mercado Pago Configuration (OPCIONAL)
+MERCADO_PAGO_ACCESS_TOKEN=tu_mercadopago_access_token
+MERCADO_PAGO_API_URL=https://api.mercadopago.com
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+
 # Environment
 NODE_ENV=development
 ```
@@ -93,7 +98,7 @@ NODE_ENV=development
 
 ## 🚀 Despliegue
 
-Para una guía completa paso a paso de configuración de Firebase Console y despliegue en Render, consulta:
+Para una guía completa paso a paso de configuración de Firebase Console y despliegue en Vercel, consulta:
 
 📖 **[Guía de Despliegue Completa](docs/DEPLOYMENT_GUIDE.md)**
 

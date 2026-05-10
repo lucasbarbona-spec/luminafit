@@ -43,6 +43,10 @@ vercel env add NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
 vercel env add NEXT_PUBLIC_FIREBASE_APP_ID
 vercel env add TOKEN_SECRET
 vercel env add NEXT_PUBLIC_BASE_URL production
+# Si usas Mercado Pago:
+vercel env add MERCADO_PAGO_ACCESS_TOKEN
+vercel env add MERCADO_PAGO_API_URL production
+vercel env add NEXT_PUBLIC_APP_URL production
 ```
 
 Para **Netlify**:

@@ -8,7 +8,15 @@ const MERCADO_PAGO_API_URL = process.env.MERCADO_PAGO_API_URL || 'https://api.me
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { title, description, price, currency, quantity, metadata, sandbox = true, passFeeToClient = false } = body;
+    const {
+      title,
+      description,
+      price,
+      currency,
+      quantity,
+      metadata,
+      passFeeToClient = false,
+    } = body;
 
     if (!title || !price || !currency) {
       return NextResponse.json(
@@ -36,6 +44,8 @@ export async function POST(request: NextRequest) {
       finalDescription = `${finalDescription} (Incluye recargo por servicio de pago de $${feeAmount.toFixed(2)})`;
     }
 
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+
     // Crear preferencia de pago
     const preferenceData = {
       items: [
@@ -48,9 +58,9 @@ export async function POST(request: NextRequest) {
         },
       ],
       back_urls: {
-        success: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/payment/success`,
-        failure: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/payment/failure`,
-        pending: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/payment/pending`,
+        success: `${appUrl}/payment/success`,
+        failure: `${appUrl}/payment/failure`,
+        pending: `${appUrl}/payment/pending`,
       },
       auto_return: 'approved',
       metadata: metadata || {},
