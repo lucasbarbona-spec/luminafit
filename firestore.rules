@@ -1,0 +1,76 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Funciones auxiliares
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Users: permitir que los usuarios autenticados accedan solo a su propio documento
+    match /users/{userId} {
+      // Permitir lectura solo si es el propio usuario
+      allow read: if isOwner(userId);
+      // Permitir crear/actualizar si es el propio usuario
+      allow create, update: if isOwner(userId);
+      // Permitir eliminar si es el propio usuario
+      allow delete: if isOwner(userId);
+      
+      // Subcolecciones del usuario
+      match /rutinas/{document=**} {
+        allow read, write: if isOwner(userId);
+      }
+      match /progreso/{document=**} {
+        allow read, write: if isOwner(userId);
+      }
+      match /notifications/{document=**} {
+        allow read, write: if isOwner(userId);
+      }
+      match /logros/{document=**} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+    
+    // Trainers y sus subcolecciones
+    match /trainers/{trainerId} {
+      allow read, write: if isAuthenticated() && request.auth.uid == trainerId;
+      
+      match /alumnos/{alumnoId} {
+        allow read: if isAuthenticated() && request.auth.uid == trainerId;
+        allow write: if isAuthenticated() && request.auth.uid == trainerId;
+      }
+      
+      match /rutinas/{rutinaId} {
+        allow read: if isAuthenticated() && request.auth.uid == trainerId;
+        allow write: if isAuthenticated() && request.auth.uid == trainerId;
+      }
+    }
+    
+    // Progreso de alumnos
+    match /trainers/{trainerId}/alumnos/{alumnoId}/progreso/{progresoId} {
+      allow read: if isAuthenticated() && request.auth.uid == trainerId;
+      allow create: if isAuthenticated() && request.auth.uid == trainerId;
+      allow update: if isAuthenticated() && request.auth.uid == trainerId;
+    }
+    
+    // Chats
+    match /chats/{chatId} {
+      allow read, write: if isAuthenticated();
+      
+      match /messages/{messageId} {
+        allow read, write: if isAuthenticated();
+      }
+    }
+    
+    // Tokens para compartir rutinas
+    match /shared-tokens/{tokenId} {
+      allow read: if true; // Cualquiera puede leer un token para acceder a una rutina
+      allow create: if isAuthenticated();
+      allow delete: if isAuthenticated();
+    }
+  }
+}
