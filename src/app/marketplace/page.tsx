@@ -7,6 +7,7 @@ import Card, { CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
 import { ShoppingCart, Tag, Star, Search, Zap, Heart } from 'lucide-react';
+import { formatCurrency } from '@/lib/utils/format-argentina';
 
 interface Producto {
   id: string;
@@ -141,7 +142,7 @@ export default function MarketplacePage() {
                 <p className="text-slate-600 mb-6">{product.descripcion}</p>
                 <div className="mb-6 flex items-center justify-between gap-3">
                   <div>
-                    <p className="text-3xl font-bold text-slate-900">${product.precio.toLocaleString()}</p>
+                    <p className="text-3xl font-bold text-slate-900">{formatCurrency(product.precio)}</p>
                     <p className="text-sm text-slate-500">Stock {product.stock > 0 ? product.stock : 'Agotado'}</p>
                   </div>
                   <div className="rounded-2xl bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-700">{product.stock > 0 ? 'Disponible' : 'Sin stock'}</div>

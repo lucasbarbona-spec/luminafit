@@ -252,7 +252,7 @@ export default function RegisterPage() {
                             <h4 className="font-semibold text-gray-900">{plan.name}</h4>
                             {plan.popular && <Badge variant="success" className="text-xs">Popular</Badge>}
                           </div>
-                          <p className="text-2xl font-bold text-gray-900">${plan.price.toLocaleString()} {plan.currency}</p>
+                          <p className="text-2xl font-bold text-gray-900">{formatCurrency(plan.price)}</p>
                           <p className="text-sm text-gray-600">
                             {plan.billing === 'monthly' ? 'Mensual' : 
                              plan.billing === 'quarterly' ? 'Trimestral' : 'Anual'}

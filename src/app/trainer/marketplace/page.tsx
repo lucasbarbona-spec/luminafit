@@ -152,7 +152,7 @@ export default function TrainerMarketplace() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Valor Inventario</p>
-                  <p className="text-2xl font-bold text-gray-900">${totalRevenue.toLocaleString()}</p>
+                  <p className="text-2xl font-bold text-gray-900">{formatCurrency(totalRevenue)}</p>
                 </div>
                 <DollarSign className="w-8 h-8 text-warning-600" />
               </div>
@@ -227,11 +227,11 @@ export default function TrainerMarketplace() {
                     <div>
                       {offer ? (
                         <div className="flex items-center gap-2">
-                          <span className="text-lg font-bold text-gray-900">${displayPrice.toLocaleString()}</span>
-                          <span className="text-sm text-gray-500 line-through">${product.precio.toLocaleString()}</span>
+                          <span className="text-lg font-bold text-gray-900">{formatCurrency(displayPrice)}</span>
+                          <span className="text-sm text-gray-500 line-through">{formatCurrency(product.precio)}</span>
                         </div>
                       ) : (
-                        <span className="text-lg font-bold text-gray-900">${product.precio.toLocaleString()}</span>
+                        <span className="text-lg font-bold text-gray-900">{formatCurrency(product.precio)}</span>
                       )}
                       {offer && <Badge variant="success" className="mt-1">-{offer.descuento}%</Badge>}
                     </div>
