@@ -25,10 +25,25 @@ export default function HomePage() {
   const handleGoogleSignIn = async () => {
     setLoading(true);
     try {
+      console.log('Iniciando sign in con Google...');
       const result = await signInWithPopup(auth, provider);
+      console.log('Usuario autenticado:', result.user);
       setUser(result.user);
-    } catch (error) {
-      console.error('Error signing in:', error);
+    } catch (error: any) {
+      console.error('Error detallado signing in:', error);
+      console.error('Código de error:', error.code);
+      console.error('Mensaje de error:', error.message);
+      
+      // Mostrar mensaje específico según el error
+      if (error.code === 'auth/popup-closed-by-user') {
+        alert('La ventana de autenticación fue cerrada. Por favor intenta nuevamente.');
+      } else if (error.code === 'auth/popup-blocked') {
+        alert('La ventana emergente fue bloqueada. Por favor permite ventanas emergentes para este sitio.');
+      } else if (error.code === 'auth/unauthorized-domain') {
+        alert('Dominio no autorizado. Contacta al administrador.');
+      } else {
+        alert(`Error de autenticación: ${error.message}`);
+      }
     } finally {
       setLoading(false);
     }
