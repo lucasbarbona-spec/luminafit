@@ -13,7 +13,7 @@ NEXT_PUBLIC_FIREBASE_APP_ID=1:31252551333:web:2de100c055e8202bbb5f4c
 TOKEN_SECRET=2e9bejzO2czOwEDJWfSu0c/n8WPpz6vASZhTfiQK1fo=
 
 # Application Configuration (REQUIRED)
-NEXT_PUBLIC_BASE_URL=https://luminafit-9ejyf3x9p-lucasbarbona-specs-projects.vercel.app/
+NEXT_PUBLIC_BASE_URL=https://luminafit.vercel.app/
 
 # Environment
 NODE_ENV=development
