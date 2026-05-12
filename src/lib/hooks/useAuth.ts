@@ -11,26 +11,43 @@ export function useAuth() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (typeof window === 'undefined') {
+      setLoading(false);
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        // Get user data from Firestore
-        try {
-          const { doc, getDoc } = await import('firebase/firestore');
-          const { db } = await import('@/lib/firebase');
-          
-          const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
-          
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
-            setUser({
-              uid: firebaseUser.uid,
-              email: firebaseUser.email || '',
-              displayName: firebaseUser.displayName || userData.displayName || '',
-              role: userData.role || 'client',
-              photoURL: firebaseUser.photoURL || userData.photoURL || '',
-            });
-          } else {
-            // Fallback to Firebase Auth data
+      try {
+        if (firebaseUser) {
+          // Get user data from Firestore
+          try {
+            const { doc, getDoc } = await import('firebase/firestore');
+            const { db } = await import('@/lib/firebase');
+            
+            const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+            
+            if (userDoc.exists()) {
+              const userData = userDoc.data();
+              setUser({
+                uid: firebaseUser.uid,
+                email: firebaseUser.email || '',
+                displayName: firebaseUser.displayName || userData.displayName || '',
+                role: userData.role || 'client',
+                photoURL: firebaseUser.photoURL || userData.photoURL || '',
+              });
+            } else {
+              // Fallback to Firebase Auth data
+              setUser({
+                uid: firebaseUser.uid,
+                email: firebaseUser.email || '',
+                displayName: firebaseUser.displayName || '',
+                role: 'client',
+                photoURL: firebaseUser.photoURL || '',
+              });
+            }
+          } catch (error) {
+            console.warn('Error fetching user data from Firestore:', error);
+            // Fallback to Firebase Auth data on error
             setUser({
               uid: firebaseUser.uid,
               email: firebaseUser.email || '',
@@ -39,20 +56,15 @@ export function useAuth() {
               photoURL: firebaseUser.photoURL || '',
             });
           }
-        } catch (error) {
-          // Fallback to Firebase Auth data on error
-          setUser({
-            uid: firebaseUser.uid,
-            email: firebaseUser.email || '',
-            displayName: firebaseUser.displayName || '',
-            role: 'client',
-            photoURL: firebaseUser.photoURL || '',
-          });
+        } else {
+          setUser(null);
         }
-      } else {
+      } catch (error) {
+        console.error('Error in auth state change:', error);
         setUser(null);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     });
 
     return () => unsubscribe();

@@ -71,16 +71,29 @@ export function useArgentinaLocale(): UseArgentinaLocaleReturn {
   const [currentTimezone, setCurrentTimezone] = useState<string>(getArgentinaTimezone());
   const [isCurrentlyWorkingHours, setIsCurrentlyWorkingHours] = useState<boolean>(false);
 
-  // Actualizar tiempo cada segundo
+  // Actualizar tiempo cada segundo (solo en el cliente)
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     const updateTimer = () => {
-      const now = new Date();
-      const argentinaTime = toArgentinaTimezone(now);
-      
-      setCurrentTime(argentinaTime);
-      setIsCurrentlyWorkingHours(
-        isWorkingDay(argentinaTime) && isWorkingHours(argentinaTime)
-      );
+      try {
+        const now = new Date();
+        const argentinaTime = toArgentinaTimezone(now);
+        
+        setCurrentTime(prevTime => {
+          // Solo actualizar si realmente cambió el tiempo
+          if (prevTime.getTime() !== argentinaTime.getTime()) {
+            return argentinaTime;
+          }
+          return prevTime;
+        });
+        
+        setIsCurrentlyWorkingHours(
+          isWorkingDay(argentinaTime) && isWorkingHours(argentinaTime)
+        );
+      } catch (error) {
+        console.warn('Error updating timer:', error);
+      }
     };
 
     // Actualizar inmediatamente
@@ -89,7 +102,9 @@ export function useArgentinaLocale(): UseArgentinaLocaleReturn {
     // Configurar intervalo para actualizar cada segundo
     const interval = setInterval(updateTimer, 1000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   return {
