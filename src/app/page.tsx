@@ -19,16 +19,8 @@ import { useArgentinaLocale } from '@/lib/hooks/useArgentinaLocale';
 export default function HomePage() {
   const { formatCurrency, config } = useArgentinaLocale();
   
-  const handleLoginClick = () => {
-    window.location.href = '/login';
-  };
-
-  const handleRegisterClick = () => {
-    window.location.href = '/register';
-  };
-
-  const handleMarketplaceClick = () => {
-    window.location.href = '/marketplace';
+  const handleNavigation = (path: string) => {
+    window.location.href = path;
   };
 
   // Planes de suscripción en pesos argentinos
@@ -78,7 +70,7 @@ export default function HomePage() {
               <Button
                 variant="secondary"
                 size="lg"
-                onClick={handleMarketplaceClick}
+                onClick={() => handleNavigation('/marketplace')}
                 className="w-full bg-white text-primary-600 hover:bg-gray-100 font-semibold"
               >
                 <ShoppingBag className="w-5 h-5 mr-2" />
@@ -100,7 +92,7 @@ export default function HomePage() {
               <Button
                 variant="primary"
                 size="lg"
-                onClick={handleLoginClick}
+                onClick={() => handleNavigation('/login')}
                 className="w-full"
               >
                 Iniciar Sesión
@@ -108,7 +100,7 @@ export default function HomePage() {
               <Button
                 variant="outline"
                 size="lg"
-                onClick={handleRegisterClick}
+                onClick={() => handleNavigation('/register')}
                 className="w-full"
               >
                 Registrarse

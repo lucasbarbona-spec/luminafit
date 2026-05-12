@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { useProductos } from '@/lib/hooks/useFirestore';
+import { useArgentinaLocale } from '@/lib/hooks/useArgentinaLocale';
 import TrainerNav from '@/components/navigation/TrainerNav';
 import Card, { CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
@@ -30,6 +31,7 @@ import type { Producto, Oferta } from '@/types';
 
 export default function TrainerMarketplace() {
   const { user } = useAuth();
+  const { formatCurrency } = useArgentinaLocale();
   const router = useRouter();
   const { productos, createProducto, updateProducto, deleteProducto, loading: prodLoading } = useProductos(user?.uid);
   const [searchTerm, setSearchTerm] = useState('');

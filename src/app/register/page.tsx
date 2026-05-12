@@ -6,6 +6,7 @@ import { useAuth } from '@/lib/hooks/useAuth';
 import { signUpWithEmail } from '@/lib/auth';
 import { useMercadoPago } from '@/lib/hooks/useMercadoPago';
 import { ArgentinaConfig } from '@/lib/config/argentina';
+import { useArgentinaLocale } from '@/lib/hooks/useArgentinaLocale';
 import Button from '@/components/ui/Button';
 import Card, { CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
@@ -26,6 +27,7 @@ import {
 export default function RegisterPage() {
   const router = useRouter();
   const { user } = useAuth();
+  const { formatCurrency } = useArgentinaLocale();
   const { initiateSubscriptionCheckout } = useMercadoPago({ sandbox: true });
   const [formData, setFormData] = useState({
     displayName: '',
